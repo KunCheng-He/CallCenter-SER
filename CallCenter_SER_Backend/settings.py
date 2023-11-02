@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 # 一些隐私配置
-import myconfig
+from .myconfig import mysql_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # REST API
+    'accounts',  # 自定义用户模型
 ]
 
 MIDDLEWARE = [
@@ -83,7 +84,7 @@ DATABASES = {
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
     # 修改数据库配置，使用 MySQL
-    'default': myconfig.mysql_config
+    'default': mysql_config
 }
 
 
@@ -128,6 +129,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# 使用自定义的用户模型
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 # REST API 所有相关的配置
 # 全局配置
