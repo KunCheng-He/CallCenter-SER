@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+# 一些隐私配置
+import myconfig
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +28,7 @@ SECRET_KEY = 'django-insecure-@$n*n91%d7n!^@7-iq-+b0yt=m2x%8we75k4q-d1=eq7h^60w%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',  # REST API
 ]
 
 MIDDLEWARE = [
@@ -74,10 +78,12 @@ WSGI_APPLICATION = 'CallCenter_SER_Backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
+    # 修改数据库配置，使用 MySQL
+    'default': myconfig.mysql_config
 }
 
 
@@ -103,13 +109,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -121,3 +127,31 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# REST API 所有相关的配置
+# 全局配置
+REST_FRAMEWORK = {
+    #指定用于支持coreapi的Schema
+    'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',  # 自带的分页类
+    'PAGE_SIZE': 10,  # 默认每页大小
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',  # 默认时间格式
+    'DEFAULT_RENDERER_CLASSES': (  # 默认渲染器 Render 类
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (  # 默认解析器 Parser 类，解析 request.data
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FileUploadParser',  # 上传文件
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [  # 默认权限
+        'rest_framework.permissions.IsAuthenticated',  # 必须登录后才能访问
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [  # 默认认证
+        'rest_framework.authentication.BasicAuthentication',  # 基本认证
+        'rest_framework.authentication.SessionAuthentication',  # 会话认证
+    ]
+}
