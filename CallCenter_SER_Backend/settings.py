@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',  # REST API
     'accounts',  # 自定义用户模型
+    'emailbackends'
 ]
 
 MIDDLEWARE = [
@@ -131,6 +132,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 使用自定义的用户模型
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+# 自定义认证模型（邮箱登录）
+AUTHENTICATION_BACKENDS = [
+    # 'django.contrib.auth.backends.ModelBackend',
+    'emailbackends.models.CustomModelBackend'
+]
 
 # REST API 所有相关的配置
 # 全局配置
