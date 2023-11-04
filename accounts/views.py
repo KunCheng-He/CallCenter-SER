@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 
 from .serializers import CustomUserSerializer
 from .models import CustomUser
+from .permissions import AccoutsPermissions
 
 # Create your views here.
 
@@ -13,6 +14,7 @@ from .models import CustomUser
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = (AccoutsPermissions, )
 
     # 创建用户，需要对密码字段加密，否则无法通过认证
     def create(self, request, *args, **kwargs):

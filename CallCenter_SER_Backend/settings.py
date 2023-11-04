@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',  # REST API
     'accounts',  # 自定义用户模型
-    'emailbackends'
+    'emailbackends',  # 自定义邮箱认证登录
 ]
 
 MIDDLEWARE = [
