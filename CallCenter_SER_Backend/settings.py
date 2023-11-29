@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',  # REST API
-    'accounts',  # 自定义用户模型
-    'emailbackends',  # 自定义邮箱认证登录
+    'rest_framework',   # REST API
+    'accounts',         # 自定义用户模型
+    'emailbackends',    # 自定义邮箱认证登录
+    'corsheaders',      # 跨域库
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # 跨域中间件
 ]
 
 ROOT_URLCONF = 'CallCenter_SER_Backend.urls'
@@ -165,3 +167,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',  # 会话认证
     ]
 }
+
+# 关于跨域请求的相关配置
+# 跨域支持
+CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:5173']  # 授权进行跨站点 HTTP 请求的源列表
+# 因为跨域之后需要传递sessionid 到浏览器cookie，所以添加如下配置。
+CORS_ALLOW_CREDENTIALS = True  # 允许 Cookie 包含在跨站点 HTTP 请求中
+SESSION_COOKIE_SAMESITE = None  # django 自己的安全策略
